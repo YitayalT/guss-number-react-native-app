@@ -1,7 +1,16 @@
 import { TextInput, View, Text, StyleSheet } from "react-native";
 import PrimaryButton from "../components/PrimaryButton";
+import { useState } from "react";
 
 const StartGameScreen = () => {
+  const [enteredNumber, setEnteredNumber] = useState("");
+  const numberInputHandler = (enteredValue) => {
+    setEnteredNumber(enteredValue);
+  };
+
+  const confirmInputhandler = () =>{
+  console.log('Confirm Pressed!');
+  }
   return (
     <View style={styles.inputContainer}>
       <TextInput
@@ -10,17 +19,19 @@ const StartGameScreen = () => {
         keyboardType="number-pad"
         autoCapitalize="none"
         autoCorrect={false}
+        onChangeText={numberInputHandler}
+        value={enteredNumber}
       />
-      <View style = {styles.buttonsView}>
-        <View style = {styles.forEachButton}>
-        <PrimaryButton>
-          <Text>Reset</Text>
-        </PrimaryButton>
+      <View style={styles.buttonsView}>
+        <View style={styles.forEachButton}>
+          <PrimaryButton>
+            <Text>Reset</Text>
+          </PrimaryButton>
         </View>
-        <View style = {styles.forEachButton}>
-        <PrimaryButton>
-          <Text>Confirm</Text>
-        </PrimaryButton>
+        <View style={styles.forEachButton}>
+          <PrimaryButton onPress = {confirmInputhandler}>
+            <Text>Confirm</Text>
+          </PrimaryButton>
         </View>
       </View>
     </View>
@@ -50,11 +61,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   buttonsView: {
-    flexDirection: 'row'
+    flexDirection: "row",
   },
   forEachButton: {
-    flex:1
-  }
+    flex: 1,
+  },
 });
 
 export default StartGameScreen;
