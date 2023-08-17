@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import Title from "../components/UI/Title";
 import { useState } from "react";
 import NumberContainer from "../components/Game/NumberContainer";
@@ -16,15 +16,37 @@ const generateBetweenRandom = (min, max, exclude) => {
 let minBoundary = 1;
 let maxBoundary = 100;
 const GameScreen = ({ userNumber }) => {
-  const initialGuss = generateBetweenRandom(minBoundary, maxBoundary, userNumber);
+  const initialGuss = generateBetweenRandom(
+    minBoundary,
+    maxBoundary,
+    userNumber
+  );
   const [currentGuss, setCurrentGuss] = useState(initialGuss);
 
-  const nextGussHandler = (direction) =>{
-   if (direction === 'lowwer') {
-    maxBoundary = currentGuss;
-    generateBetweenRandom(minBoundary, maxBoundary, currentGuss)
-   }
-  }
+  const nextGussHandler = (direction) => {
+    if (
+      (direction === "lower" && currentGuss < userNumber) ||
+      (direction === "greater" && currentGuss > userNumber)
+    ) {
+      Alert.alert("Don't lie!", "You know that this is wrong ...", [
+        {
+          text: "Sorry!",
+          style: "cancel",
+        },
+      ]);
+      return;
+    } else if (direction === "lower") {
+      maxBoundary = currentGuss;
+    } else {
+      minBoundary = currentGuss + 1;
+    }
+    const newRndNumber = generateBetweenRandom(
+      minBoundary,
+      maxBoundary,
+      currentGuss
+    );
+    setCurrentGuss(newRndNumber);
+  };
   return (
     <View style={styles.screen}>
       <Title>Opponent's guss</Title>
@@ -32,8 +54,12 @@ const GameScreen = ({ userNumber }) => {
       <View>
         <Text>Higher or Lower</Text>
         <View>
-        <PrimaryButton>+</PrimaryButton>
-        <PrimaryButton>-</PrimaryButton>
+          <PrimaryButton onPress={nextGussHandler.bind(this, "lower")}>
+            +
+          </PrimaryButton>
+          <PrimaryButton onPress={nextGussHandler.bind(this, "greater")}>
+            -
+          </PrimaryButton>
         </View>
       </View>
       {/* <View>
